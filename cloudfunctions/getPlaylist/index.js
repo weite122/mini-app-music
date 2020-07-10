@@ -9,10 +9,30 @@ const rp = require('request-promise')
 
 const URL = 'http://musicapi.xiecheng.live/personalized'
 
+const MAX_LIMIT = 100
 const playlistCollection = db.collection('playlist')
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const list = await playlistCollection.get()
+  const countResult = await playlistCollection.count()
+  const total = countResult.total
+  const batchTimes = Math.ceil(total / MAX_LIMIT)
+  const tasks = []
+  for (let i = 0; i < batchTimes; i++) {
+    let promise = playlistCollection.skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
+    tasks.push(promise)
+  }
+  let list = {
+    data: []
+  }
+  if (tasks.length > 0) {
+    list = (await Promise.all(tasks)).reduce((acc, cur) => {
+      return {
+        data: acc.data.concat(cur.data)
+      }
+    })
+  }
+
+
   const playlist = await rp(URL).then((res) => {
     return JSON.parse(res).result
   })
