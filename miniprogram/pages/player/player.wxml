@@ -8,7 +8,7 @@
 
   <view class="control">
     <text class="iconfont icon-shangyishoushangyige"></text>
-    <text class="iconfont icon-bofang1"></text>
+    <text class="iconfont {{isPlaying?'icon-zanting1':'icon-bofang1'}}"></text>
     <text class="iconfont icon-xiayigexiayishou"></text>
   </view>
 </view>

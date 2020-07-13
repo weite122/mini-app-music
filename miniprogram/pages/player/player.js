@@ -1,34 +1,58 @@
 // pages/player/player.js
 let musiclist = []
 let nowPlayingIndex = 0
+const backgroundAudioManager = wx.getBackgroundAudioManager()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    picUrl: ''
+    picUrl: '',
+    isPlaying: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
     musiclist = wx.getStorageSync('musiclist')
     nowPlayingIndex = options.index
-    this._loadMusicDetail()
+    this._loadMusicDetail(options.musicId)
   },
 
-  _loadMusicDetail(){
+  _loadMusicDetail(musicId){
     let music = musiclist[nowPlayingIndex]
     wx.setNavigationBarTitle({
       title: music.name,
     })
 
     this.setData({
-      picUrl: music.al.picUrl
+      picUrl: music.al.picUrl,
+      isPlaying: false
     })
+    wx.showLoading({
+      title: '歌曲加载中',
+    })
+    wx.cloud.callFunction({
+      name: 'music',
+      data: {
+        $url: 'musicUrl',
+        musicId
+      }
+    }).then((res)=> {
+      let result = JSON.parse(res.result)
+      backgroundAudioManager.src = result.data[0].url
+      backgroundAudioManager.title = music.name
+      backgroundAudioManager.coverImgUrl = music.al.picUrl
+      backgroundAudioManager.singer = music.ar[0].name
+      backgroundAudioManager.epname = music.al.name
+      this.setData({
+        isPlaying: true
+      })
+      wx.hideLoading()
+    })
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
