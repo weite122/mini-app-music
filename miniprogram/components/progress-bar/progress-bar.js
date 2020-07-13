@@ -2,7 +2,7 @@ let movableAreaWidth = 0
 let movableViewWidth = 0
 const backgroundAudioManager = wx.getBackgroundAudioManager()
 let currentSec = -1
-
+let duration = 0
 Component({
   /**
    * 组件的属性列表
@@ -32,6 +32,22 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    onChange(event) {
+      if (event.detail.source == 'touch') {
+        this.data.progress = event.detail.x / (movableAreaWidth - movableViewWidth) * 100
+        this.data.movableDis = event.detail.x
+      }
+    },
+    onTouchEnd() {
+      const currentTimeFmt = this._dateFormat(Math.floor(backgroundAudioManager.currentTime))
+      this.setData({
+        progress: this.data.progress,
+        movableDis: this.data.movableDis,
+        ['showTime.currentTime']: currentTimeFmt.min + ':' + currentTimeFmt.sec
+      })
+      backgroundAudioManager.seek(duration * this.data.progress / 100)
+
+    },
     _getMovableDis(){
       const query = this.createSelectorQuery()
       query.select('.movable-area').boundingClientRect()
@@ -71,7 +87,7 @@ Component({
 
       backgroundAudioManager.onTimeUpdate(() => {
         const currentTime = backgroundAudioManager.currentTime
-        const duration = backgroundAudioManager.duration
+        duration = backgroundAudioManager.duration
         const sec = currentTime.toString().split('.')[0]
         if (sec != currentSec) {
           const currentTimeFmt = this._dateFormat(currentTime)
