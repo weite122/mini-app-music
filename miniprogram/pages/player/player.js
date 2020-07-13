@@ -14,6 +14,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options)
     musiclist = wx.getStorageSync('musiclist')
     nowPlayingIndex = options.index
     this._loadMusicDetail()
