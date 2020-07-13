@@ -1,6 +1,8 @@
 let movableAreaWidth = 0
 let movableViewWidth = 0
 const backgroundAudioManager = wx.getBackgroundAudioManager()
+let currentSec = -1
+
 Component({
   /**
    * 组件的属性列表
@@ -68,7 +70,18 @@ Component({
       })
 
       backgroundAudioManager.onTimeUpdate(() => {
-        // console.log('onTimeUpdate')
+        const currentTime = backgroundAudioManager.currentTime
+        const duration = backgroundAudioManager.duration
+        const sec = currentTime.toString().split('.')[0]
+        if (sec != currentSec) {
+          const currentTimeFmt = this._dateFormat(currentTime)
+          this.setData({
+            movableDis: (movableAreaWidth - movableViewWidth) * currentTime / duration,
+            progress: currentTime / duration * 100,
+            ['showTime.currentTime']: `${currentTimeFmt.min}:${currentTimeFmt.sec}`,
+          })
+          currentSec = sec
+        }
       })
 
       backgroundAudioManager.onEnded(() => {
