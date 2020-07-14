@@ -7,7 +7,7 @@
   </view>
 
   <view class="progress-bar">
-    <x-progress-bar />
+    <x-progress-bar bind:musicEnd="onNext"/>
   </view>
 
   <view class="control">
