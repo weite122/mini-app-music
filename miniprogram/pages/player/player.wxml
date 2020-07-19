@@ -2,19 +2,19 @@
 <view class="player-mask"></view>
 
 <view class="player-info">
-  <view class="player-disc  {{isPlaying?'play': ''}}" bind:tap="onChangeLyricShow" hidden="{{isLyricShow}}">
-    <image class="player-img rotation {{isPlaying?'':'rotation-paused'}}" src="{{picUrl}}"></image>
-  </view>
+	<view class="player-disc  {{isPlaying?'play': ''}}" bind:tap="onChangeLyricShow" hidden="{{isLyricShow}}">
+		<image class="player-img rotation {{isPlaying?'':'rotation-paused'}}" src="{{picUrl}}"></image>
+	</view>
 
-    <x-lyric class="lyric" isLyricShow="{{!isLyricShow}}" bind:tap="onChangeLyricShow"  lyric="{{lyric}}" />
+	<x-lyric class="lyric" isLyricShow="{{!isLyricShow}}" bind:tap="onChangeLyricShow" lyric="{{lyric}}" />
 
-  <view class="progress-bar">
-    <x-progress-bar bind:musicEnd="onNext" bind:timeUpdate="timeUpdate"/>
-  </view>
+	<view class="progress-bar">
+		<x-progress-bar bind:musicEnd="onNext" bind:timeUpdate="timeUpdate" />
+	</view>
 
-  <view class="control">
-    <text class="iconfont icon-shangyishoushangyige" bind:tap="onPrev"></text>
-    <text class="iconfont {{isPlaying?'icon-zanting1':'icon-bofang1'}}" bind:tap="togglePlaying"></text>
-    <text class="iconfont icon-xiayigexiayishou" bind:tap="onNext"></text>
-  </view>
+	<view class="control">
+		<text class="iconfont icon-shangyishoushangyige" bind:tap="onPrev"></text>
+		<text class="iconfont {{isPlaying?'icon-zanting1':'icon-bofang1'}}" bind:tap="togglePlaying"></text>
+		<text class="iconfont icon-xiayigexiayishou" bind:tap="onNext"></text>
+	</view>
 </view>
