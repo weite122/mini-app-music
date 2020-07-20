@@ -9,5 +9,5 @@
 		</view>
 	</view>
 
-
+  <x-bottom-modal modalShow="{{modalShow}}" />
 </view>
