@@ -12,7 +12,8 @@ Page({
     picUrl: '',
     isPlaying: false,
     isLyricShow: false,
-    lyric: ''
+    lyric: '',
+    isSame: false
   },
 
   /**
@@ -25,7 +26,18 @@ Page({
   },
 
   _loadMusicDetail(musicId){
-    backgroundAudioManager.stop()
+    if(musicId === app.getPlayMusicId()){
+      this.setData({
+        isSame: true
+      })
+    } else {
+      this.setData({
+        isSame: false
+      })
+    }
+    if(!this.data.isSame){
+      backgroundAudioManager.stop()
+    }
     let music = musiclist[nowPlayingIndex]
     wx.setNavigationBarTitle({
       title: music.name,
@@ -48,11 +60,19 @@ Page({
       }
     }).then((res)=> {
       let result = JSON.parse(res.result)
-      backgroundAudioManager.src = result.data[0].url
-      backgroundAudioManager.title = music.name
-      backgroundAudioManager.coverImgUrl = music.al.picUrl
-      backgroundAudioManager.singer = music.ar[0].name
-      backgroundAudioManager.epname = music.al.name
+      if(result.data[0].url === null){
+        wx.showToast({
+          title: '无权限播放'
+        })
+        return
+      }
+      if(!this.data.isSame){
+        backgroundAudioManager.src = result.data[0].url
+        backgroundAudioManager.title = music.name
+        backgroundAudioManager.coverImgUrl = music.al.picUrl
+        backgroundAudioManager.singer = music.ar[0].name
+        backgroundAudioManager.epname = music.al.name
+      }
       this.setData({
         isPlaying: true
       })
@@ -116,7 +136,6 @@ Page({
     })
   },
   onPause(){
-    console.log('xxxxxxxxx')
     this.setData({
       isPlaying: false
     })
