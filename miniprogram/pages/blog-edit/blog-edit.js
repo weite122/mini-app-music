@@ -1,47 +1,18 @@
+// pages/blog-edit/blog-edit.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    modalShow: false
-  },
-  onPublish() {
-    wx.getSetting({
-      success: (res) => {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            success: (res) => {
-              this.onLoginSuccess({
-                detail: res.userInfo
-              })
-            }
-          })
-        } else {
-          this.setData({
-            modalShow: true
-          })
-        }
-      }
-    })
+
   },
 
-  onLoginSuccess(event) {
-    const detail = event.detail
-    wx.navigateTo({
-      url: `../blog-edit/blog-edit?nickName=${detail.nickName}&avatarUrl=${detail.avatarUrl}`,
-    })
-  },
-  onLoginFail(){
-    wx.showModal({
-      title: '授权用户才能发布博客'
-    })
-  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log(options)
   },
 
   /**

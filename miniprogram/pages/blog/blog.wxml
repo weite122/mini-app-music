@@ -9,5 +9,7 @@
 		</view>
 	</view>
 
-  <x-bottom-modal modalShow="{{modalShow}}" />
+	<x-login modalShow="{{modalShow}}" bind:loginsuccess="onLoginSuccess" bind:loginfail="onLoginFail">
+
+	</x-login>
 </view>
