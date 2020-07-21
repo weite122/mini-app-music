@@ -83,6 +83,13 @@
 					"pathName": "pages/blog/blog",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "blog-edit",
+					"pathName": "pages/blog-edit/blog-edit",
+					"query": "nickName= \"涂涂\",&avatarUrl= \"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJFKT75x…l1njlPX74rkMsbtvLicicusy2maoNF9nyyIPMoclMhvkg/132\"",
+					"scene": null
 				}
 			]
 		}
