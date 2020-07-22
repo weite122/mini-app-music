@@ -1,4 +1,5 @@
 // pages/blog-edit/blog-edit.js
+const MAX_IMG_NUM = 9
 const MAX_WORDS_NUM = 140
 Page({
 
@@ -7,14 +8,16 @@ Page({
    */
   data: {
     wordsNum: 0,
-    footerBottom: 0
+    footerBottom: 0,
+    images: [],
+    selectPhoto: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
+
   },
   onInput(event) {
     let wordsNum = event.detail.value.length
@@ -26,7 +29,6 @@ Page({
     })
   },
   onFocus(event) {
-    console.log(event)
     this.setData({
       footerBottom: event.detail.height
     })
@@ -34,6 +36,40 @@ Page({
   onBlur() {
     this.setData({
       footerBottom: 0
+    })
+  },
+  onChooseImage() {
+    let max = MAX_IMG_NUM - this.data.images.length
+    wx.chooseImage({
+      count: max,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        this.setData({
+          images: this.data.images.concat(res.tempFilePaths)
+        })
+        max = MAX_IMG_NUM - this.data.images.length
+        this.setData({
+          selectPhoto: max <= 0 ? false : true
+        })
+      }
+    })
+  },
+  onDelImage(event) {
+    this.data.images.splice(event.target.dataset.index, 1)
+    this.setData({
+      images: this.data.images
+    })
+    if (this.data.images.length === MAX_IMG_NUM - 1) {
+      this.setData({
+        selectPhoto: true
+      })
+    }
+  },
+  onPreviewImage(event){
+    wx.previewImage({
+      urls: this.data.images,
+      current: event.target.dataset.imgsrc
     })
   },
   /**
