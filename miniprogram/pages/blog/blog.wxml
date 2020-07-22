@@ -9,6 +9,15 @@
 		</view>
 	</view>
 
+	<view class="blog-list">
+		<block wx:for="{{blogList}}" wx:key="_id">
+		<view class="blog-panel">
+				<x-blog-card blog="{{item}}" />
+		</view>
+	</block>
+	</view>
+
+
 	<x-login modalShow="{{modalShow}}" bind:loginsuccess="onLoginSuccess" bind:loginfail="onLoginFail">
 
 	</x-login>

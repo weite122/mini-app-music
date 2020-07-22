@@ -4,7 +4,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    modalShow: false
+    modalShow: false,
+    blogList: []
   },
   onPublish() {
     wx.getSetting({
@@ -41,9 +42,22 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this._loadBlogList()
   },
-
+  _loadBlogList(){
+    wx.cloud.callFunction({
+      name: 'blog',
+      data: {
+        $url: 'list',
+        start: 0,
+        count: 10
+      }
+    }).then((res)=> {
+      this.setData({
+        blogList: this.data.blogList.concat(res.result)
+      })
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
