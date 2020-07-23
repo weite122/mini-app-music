@@ -61,13 +61,15 @@ Component({
         content: '',
       })
     },
-    onSend() {
-      let content = this.data.content
+    onSend(event) {
+      let formId = event.detail.formId
+      let content = event.detail.value.content
       if (content.trim() === '') {
         wx.showModal({
           title: '评论内容不能为空',
           content: ''
         })
+        console.log('xxxxxxxx')
         return
       }
       wx.showLoading({
@@ -83,6 +85,31 @@ Component({
           avatarUrl: userInfo.avatarUrl
         }
       }).then((res) => {
+        let templateId = '702zfa_7t-BvP08DGbzk3QcB925lb_0pJbUrogpoNYc'
+        wx.requestSubscribeMessage({
+            tmplIds: [templateId],
+            success: (res)=> {
+                // 如果用户点击允许
+                if(res[templateId] == 'accept'){
+                    // console.log('点击了允许')
+                    wx.cloud.callFunction({
+                        name:'sendMessage',
+                        data:{
+                            templateId,
+                            content,
+                            blogId: this.properties.blogId
+                        }
+                    }).then(res => {                      
+                        this.setData({
+                            content:''
+                        })
+                    })
+                } else {
+                    // console.log('点击了取消')
+                }
+            }
+            
+        }) 
         wx.hideLoading()
         wx.showToast({
           title: '评论成功'
@@ -93,10 +120,6 @@ Component({
         })
       })
     },
-    onInput(event) {
-      this.setData({
-        content: event.detail.value
-      })
-    }
+
   }
 })
