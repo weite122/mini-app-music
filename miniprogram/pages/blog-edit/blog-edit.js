@@ -128,6 +128,10 @@ Page({
           title: '发布成功',
         })
         wx.navigateBack()
+
+        const pages = getCurrentPages()
+        const prePage = pages[pages.length - 2]
+        prePage.onPullDownRefresh()
       })
     }).catch((err)=> {
       wx.hideLoading()
