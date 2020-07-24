@@ -44,18 +44,29 @@ Page({
   onLoad: function (options) {
     this._loadBlogList()
   },
-  _loadBlogList(){
+  _loadBlogList(start= 0){
+    wx.showLoading({
+      title: '拼命加载中',
+    })
     wx.cloud.callFunction({
       name: 'blog',
       data: {
+        start,
+        count: 10,
         $url: 'list',
-        start: 0,
-        count: 10
+
       }
     }).then((res)=> {
       this.setData({
         blogList: this.data.blogList.concat(res.result)
       })
+      wx.hideLoading()
+      wx.stopPullDownRefresh()
+    })
+  },
+  goComment(event) {
+    wx.navigateTo({
+      url: '../../pages/blog-comment/blog-comment?blogId=' + event.target.dataset.blogid,
     })
   },
   /**
@@ -90,14 +101,17 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.setData({
+      blogList: []
+    })
+    this._loadBlogList(0)
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    this._loadBlogList(this.data.blogList.length)
   },
 
   /**
