@@ -45,13 +45,14 @@
 .share-btn {
   background-color: #fff;
   color: rgba(40, 47, 60, 0.8);
-  padding: 0;
-  height: 100%;
-  border: none;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  padding: 0 !important;
+  height: 100% !important;
+  border: none !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 400 !important;
 }
 
 .share-btn::after {
