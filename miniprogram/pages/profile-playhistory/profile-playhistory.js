@@ -1,11 +1,12 @@
 // pages/profile-playhistory/profile-playhistory.js
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    musiclist: []
   },
 
   /**
@@ -13,6 +14,21 @@ Page({
    */
   onLoad: function (options) {
 
+    const playHistory = wx.getStorageSync(app.globalData.openid)
+    if (playHistory.length == 0) {
+      wx.showModal({
+        title: '播放历史为空',
+        content: '',
+      })
+    } else {
+      wx.setStorage({
+        key: 'musiclist',
+        data: playHistory,
+      })
+      this.setData({
+        musiclist: playHistory
+      })
+    }
   },
 
   /**
